@@ -23,10 +23,14 @@ public class UserController {
     }
 
     @PostMapping(path = "/login")
-    public ResponseEntity<?> loginUser(@RequestBody LoginDto loginDto)
-    {
+    public ResponseEntity<?> loginUser(@RequestBody LoginDto loginDto) {
         LoginMessage loginMessage = userService.loginUser(loginDto);
         return ResponseEntity.ok(loginMessage);
     }
 
+    @PostMapping(path = "/login/admin")
+    public ResponseEntity<?> loginAdmin(@RequestBody LoginDto loginDto) {
+        LoginMessage loginMessage = userService.loginAdmin(loginDto);
+        return ResponseEntity.ok(loginMessage);
+    }
 }
