@@ -1,10 +1,9 @@
 package com.cosmetica.cosmetica.repository;
 
-import com.cosmetica.cosmetica.model.User;
+import com.cosmetica.cosmetica.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepo extends JpaRepository<User, Long> {
-    User findByEmail(String email);
+public interface ProductRepo extends JpaRepository<Product, Long> {
 }

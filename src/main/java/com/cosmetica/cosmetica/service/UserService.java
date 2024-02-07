@@ -7,4 +7,5 @@ import com.cosmetica.cosmetica.response.LoginMessage;
 public interface UserService {
      String addUser(UserDto userDto);
      LoginMessage loginUser(LoginDto loginDto);
+     LoginMessage loginAdmin(LoginDto loginDto);
 }
