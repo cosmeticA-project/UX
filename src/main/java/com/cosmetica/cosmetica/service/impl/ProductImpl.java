@@ -6,14 +6,15 @@ import com.cosmetica.cosmetica.model.User;
 import com.cosmetica.cosmetica.model.UserRole;
 import com.cosmetica.cosmetica.repository.ProductRepo;
 import com.cosmetica.cosmetica.service.ProductService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProductImpl implements ProductService {
+    private final ProductRepo productRepo;
 
-    @Autowired
-    private ProductRepo productRepo;
+    public ProductImpl(ProductRepo productRepo) {
+        this.productRepo = productRepo;
+    }
 
     @Override
     public void addProduct(ProductDto productDto, User user) {
