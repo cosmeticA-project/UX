@@ -1,3 +1,4 @@
+-- Table pour les utilisateurs
 CREATE TABLE users (
                        user_id BIGSERIAL NOT NULL PRIMARY KEY,
                        email VARCHAR(255),
@@ -6,13 +7,16 @@ CREATE TABLE users (
                        role VARCHAR(255) CHECK (role IN ('CLIENT', 'ADMIN'))
 );
 
+-- Table pour les commandes
 CREATE TABLE orders (
                         order_id BIGSERIAL NOT NULL PRIMARY KEY,
                         order_date TIMESTAMP(6),
                         user_id BIGINT,
+                        address VARCHAR(255),
                         FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
+-- Table pour les produits
 CREATE TABLE product (
                          product_id BIGSERIAL NOT NULL PRIMARY KEY,
                          product_name VARCHAR(255),
@@ -21,6 +25,7 @@ CREATE TABLE product (
                          stock INTEGER
 );
 
+-- Table pour les détails de commande
 CREATE TABLE order_detail (
                               order_detail_id BIGSERIAL NOT NULL PRIMARY KEY,
                               quantity INTEGER,
@@ -28,4 +33,14 @@ CREATE TABLE order_detail (
                               product_id BIGINT,
                               FOREIGN KEY (order_id) REFERENCES orders(order_id),
                               FOREIGN KEY (product_id) REFERENCES product(product_id)
+);
+
+-- Table pour les paniers
+CREATE TABLE cart (
+                      cart_id BIGSERIAL NOT NULL PRIMARY KEY,
+                      user_id BIGINT,
+                      product_id BIGINT,
+                      quantity INTEGER,
+                      FOREIGN KEY (user_id) REFERENCES users(user_id),
+                      FOREIGN KEY (product_id) REFERENCES product(product_id)
 );
