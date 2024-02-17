@@ -5,7 +5,7 @@ import com.cosmetica.cosmetica.model.User;
 
 public interface ProductService {
 
-    void addProduct(ProductDto productDto, User user);
+    void addProduct(ProductDto productDto);
 
-    void deleteProduct(Long productId, User user);
+    void deleteProduct(Long productId);
 }

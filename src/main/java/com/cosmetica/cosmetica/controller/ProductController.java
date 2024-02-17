@@ -1,17 +1,15 @@
 package com.cosmetica.cosmetica.controller;
 
 import com.cosmetica.cosmetica.dto.ProductDto;
-import com.cosmetica.cosmetica.model.User;
 import com.cosmetica.cosmetica.service.ProductService;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
 @RequestMapping("api/product")
 public class ProductController {
-
     private final ProductService productService;
 
     public ProductController(ProductService productService) {
@@ -19,19 +17,22 @@ public class ProductController {
     }
 
     @PostMapping(path = "/add")
-    public String saveProduct(@RequestBody ProductDto productDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-
-        productService.addProduct(productDto, user);
-        return "Product added successfully";
+    public ResponseEntity<?> addProduct(@RequestBody ProductDto productDto) {
+        try {
+            productService.addProduct(productDto);
+            return ResponseEntity.ok("Product added successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while adding the product");
+        }
     }
-    @DeleteMapping(path = "/{productId}")
-    public String deleteProduct(@PathVariable Long productId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
 
-        productService.deleteProduct(productId, user);
-        return "Product deleted successfully";
+    @DeleteMapping(path = "/{productId}/delete")
+    public ResponseEntity<?> deleteProduct(@PathVariable Long productId) {
+        try {
+            productService.deleteProduct(productId);
+            return ResponseEntity.ok("Product deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while deleting the product");
+        }
     }
 }

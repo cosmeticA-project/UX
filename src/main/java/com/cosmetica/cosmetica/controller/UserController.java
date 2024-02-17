@@ -27,10 +27,4 @@ public class UserController {
         LoginMessage loginMessage = userService.loginUser(loginDto);
         return ResponseEntity.ok(loginMessage);
     }
-
-    @PostMapping(path = "/login/admin")
-    public ResponseEntity<?> loginAdmin(@RequestBody LoginDto loginDto) {
-        LoginMessage loginMessage = userService.loginAdmin(loginDto);
-        return ResponseEntity.ok(loginMessage);
-    }
 }

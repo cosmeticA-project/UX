@@ -53,24 +53,4 @@ public class UserServiceImpl implements UserService {
             return new LoginMessage("Email does not exist", false);
         }
     }
-
-    @Override
-    public LoginMessage loginAdmin(LoginDto loginDto) {
-        String email = loginDto.getEmail();
-        String password = loginDto.getPasswordHash();
-
-        User user = userRepo.findByEmail(email);
-        if (user != null && user.getRole().equals(UserRole.ADMIN)) {
-            String encodedPassword = user.getPasswordHash();
-            boolean isPwdRight = passwordEncoder.matches(password, encodedPassword);
-            if (isPwdRight) {
-                return new LoginMessage("Admin login successful", true);
-            } else {
-                return new LoginMessage("Incorrect password", false);
-            }
-        } else {
-            return new LoginMessage("Email does not exist or user is not an admin", false);
-        }
-    }
-
 }
