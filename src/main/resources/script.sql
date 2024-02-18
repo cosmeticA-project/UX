@@ -35,12 +35,17 @@ CREATE TABLE order_detail (
                               FOREIGN KEY (product_id) REFERENCES product(product_id)
 );
 
--- Table pour les paniers
-CREATE TABLE cart (
-                      cart_id BIGSERIAL NOT NULL PRIMARY KEY,
-                      user_id BIGINT,
-                      product_id BIGINT,
-                      quantity INTEGER,
-                      FOREIGN KEY (user_id) REFERENCES users(user_id),
-                      FOREIGN KEY (product_id) REFERENCES product(product_id)
+CREATE TABLE Cart (
+                      cart_id SERIAL PRIMARY KEY,
+                      user_id INT,
+                      FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+CREATE TABLE CartItem (
+                          cart_item_id SERIAL PRIMARY KEY,
+                          cart_id INT,
+                          product_id INT,
+                          quantity INT,
+                          FOREIGN KEY (cart_id) REFERENCES Cart(cart_id),
+                          FOREIGN KEY (product_id) REFERENCES Product(product_id)
 );

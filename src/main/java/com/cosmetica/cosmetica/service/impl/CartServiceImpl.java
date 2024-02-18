@@ -1,61 +1,69 @@
 package com.cosmetica.cosmetica.service.impl;
 
-import com.cosmetica.cosmetica.dto.CartDto;
+import com.cosmetica.cosmetica.dto.ProductDto;
+import com.cosmetica.cosmetica.dto.UserDto;
 import com.cosmetica.cosmetica.model.Cart;
+import com.cosmetica.cosmetica.model.CartItem;
 import com.cosmetica.cosmetica.model.Product;
-import com.cosmetica.cosmetica.model.User;
+import com.cosmetica.cosmetica.repository.CartItemRepo;
 import com.cosmetica.cosmetica.repository.CartRepo;
-import com.cosmetica.cosmetica.repository.ProductRepo;
-import com.cosmetica.cosmetica.repository.UserRepo;
-import com.cosmetica.cosmetica.response.CartMessage;
 import com.cosmetica.cosmetica.service.CartService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class CartServiceImpl implements CartService {
 
-    private final CartRepo cartRepository;
-    private final UserRepo userRepository;
-    private final ProductRepo productRepository;
+    private final CartRepo cartRepo;
 
-    public CartServiceImpl(CartRepo cartRepository, UserRepo userRepository, ProductRepo productRepository) {
-        this.cartRepository = cartRepository;
-        this.userRepository = userRepository;
-        this.productRepository = productRepository;
+    @Autowired
+    public CartServiceImpl(CartRepo cartRepo) {
+        this.cartRepo = cartRepo;
     }
 
     @Override
-    public CartMessage addToCart(CartDto cartDto) {
-        User user = userRepository.findById(cartDto.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public void addProductToCart(UserDto user, ProductDto productDto, int quantity) {
+        Cart cart = cartRepo.findByUserUserId(user.getUserId())
+                .orElse(new Cart());
 
-        Product product = productRepository.findById(cartDto.getProductId())
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+        Optional<CartItem> existingCartItem = cart.getCartItems().stream()
+                .filter(item -> item.getProduct().getProductId().equals(productDto.getProductId()))
+                .findFirst();
 
-        int quantity = cartDto.getQuantity();
+        if (existingCartItem.isPresent()) {
+            CartItem cartItem = existingCartItem.get();
+            cartItem.setQuantity(cartItem.getQuantity() + quantity);
+        } else {
+            CartItem cartItem = new CartItem();
+            cartItem.setQuantity(quantity);
+            cartItem.setCart(cart);
 
-        if (user == null || product == null) {
-            throw new RuntimeException("User or product not found");
+            Product product = new Product();
+            product.setProductId(productDto.getProductId());
+            cartItem.setProduct(product);
+
+            cart.getCartItems().add(cartItem);
         }
 
-        Cart cart = new Cart();
-        cart.setUser(user);
-        cart.setProduct(product);
-        cart.setQuantity(quantity);
-
-        cartRepository.save(cart);
-
-        return new CartMessage("Product added to cart", true);
+        cartRepo.save(cart);
     }
 
+
+
     @Override
-    public CartMessage removeFromCart(Long cartId) {
-        if (!cartRepository.existsById(cartId)) {
-            throw new RuntimeException("Cart not found");
-        }
+    public void removeProductFromCart(UserDto user, ProductDto productDto) {
+        Cart cart = cartRepo.findByUserUserId(user.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User does not have a cart"));
 
-        cartRepository.deleteById(cartId);
+        CartItem cartItem = cart.getCartItems().stream()
+                .filter(item -> item.getProduct().getProductId().equals(productDto.getProductId()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Product is not in the cart"));
 
-        return new CartMessage("Product removed from cart", true);
+        cart.getCartItems().remove(cartItem);
+
+        cartRepo.save(cart);
     }
 }

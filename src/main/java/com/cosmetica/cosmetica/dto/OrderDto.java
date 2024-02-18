@@ -12,8 +12,6 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDto {
-    private Long orderId;
-
     private User user;
 
     private String address;

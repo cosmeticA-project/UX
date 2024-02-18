@@ -1,9 +1,9 @@
 package com.cosmetica.cosmetica.service;
 
-import com.cosmetica.cosmetica.dto.CartDto;
-import com.cosmetica.cosmetica.response.CartMessage;
+import com.cosmetica.cosmetica.dto.ProductDto;
+import com.cosmetica.cosmetica.dto.UserDto;
 
 public interface CartService {
-    CartMessage addToCart(CartDto cartDto);
-    CartMessage removeFromCart(Long cartId);
+    void addProductToCart(UserDto user, ProductDto product, int quantity);
+    void removeProductFromCart(UserDto user, ProductDto product);
 }
