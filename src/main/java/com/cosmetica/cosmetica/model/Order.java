@@ -22,6 +22,9 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "address")
+    private String address;
+
     @Column(name = "order_date")
     private Timestamp orderDate;
 }
