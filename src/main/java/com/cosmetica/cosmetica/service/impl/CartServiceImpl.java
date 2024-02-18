@@ -5,7 +5,6 @@ import com.cosmetica.cosmetica.dto.UserDto;
 import com.cosmetica.cosmetica.model.Cart;
 import com.cosmetica.cosmetica.model.CartItem;
 import com.cosmetica.cosmetica.model.Product;
-import com.cosmetica.cosmetica.repository.CartItemRepo;
 import com.cosmetica.cosmetica.repository.CartRepo;
 import com.cosmetica.cosmetica.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
