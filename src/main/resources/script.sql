@@ -22,19 +22,6 @@ CREATE TABLE orders (
                         address VARCHAR(255)
 );
 
-
-CREATE TABLE cart (
-                      cart_id SERIAL PRIMARY KEY,
-                      user_id BIGINT REFERENCES users
-);
-
-CREATE TABLE cart_item (
-                           cart_item_id SERIAL PRIMARY KEY,
-                           cart_id BIGINT REFERENCES cart,
-                           product_id BIGINT REFERENCES product,
-                           quantity INTEGER NOT NULL
-);
-
 CREATE TABLE order_detail (
                               order_detail_id SERIAL PRIMARY KEY,
                               order_id BIGINT REFERENCES orders,

@@ -1,11 +1,6 @@
 package com.cosmetica.cosmetica.service.impl;
 
-import com.cosmetica.cosmetica.model.Cart;
-import com.cosmetica.cosmetica.model.CartItem;
 import com.cosmetica.cosmetica.model.Order;
-import com.cosmetica.cosmetica.model.OrderDetail;
-import com.cosmetica.cosmetica.repository.CartRepo;
-import com.cosmetica.cosmetica.repository.OrderDetailRepo;
 import com.cosmetica.cosmetica.repository.OrderRepo;
 import com.cosmetica.cosmetica.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,31 +11,19 @@ import java.sql.Timestamp;
 @Service
 public class OrderServiceImpl implements OrderService {
 
+    private final OrderRepo orderRepo;
+
     @Autowired
-    private OrderDetailRepo orderDetailRepo;
-    @Autowired
-    private OrderRepo orderRepo;
-    @Autowired
-    private CartRepo cartRepo;
+    public OrderServiceImpl(OrderRepo orderRepo) {
+        this.orderRepo = orderRepo;
+    }
 
     @Override
-    public void saveOrder(Cart cart) {
-        Order order = new Order();
-        order.setUser(cart.getUser());
-        order.setAddress(order.getAddress());
+    public Order placeOrder(Order order) {
+        // Set the order date to the current timestamp
         order.setOrderDate(new Timestamp(System.currentTimeMillis()));
 
-        orderRepo.save(order);
-
-        for (CartItem item : cart.getCartItems()){
-            OrderDetail orderDetail = new OrderDetail();
-            orderDetail.setOrder(order);
-            orderDetail.setQuantity(item.getQuantity());
-            orderDetail.setProduct(item.getProduct());
-
-            orderDetailRepo.save(orderDetail);
-        }
-
-        cartRepo.save(cart);
+        // Save the order to the database
+        return orderRepo.save(order);
     }
 }

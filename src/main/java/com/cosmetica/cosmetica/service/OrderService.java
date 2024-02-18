@@ -1,7 +1,7 @@
 package com.cosmetica.cosmetica.service;
 
-import com.cosmetica.cosmetica.model.Cart;
+import com.cosmetica.cosmetica.model.Order;
 
 public interface OrderService {
-    void saveOrder(Cart cart);
+    Order placeOrder(Order order);
 }

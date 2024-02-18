@@ -1,6 +1,6 @@
 package com.cosmetica.cosmetica.controller;
 
-import com.cosmetica.cosmetica.model.Cart;
+import com.cosmetica.cosmetica.model.Order;
 import com.cosmetica.cosmetica.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,15 +9,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping(("/api"))
 public class OrderController {
 
-    @Autowired
-    private OrderService orderService;
+    private final OrderService orderService;
 
-    @PostMapping("/create")
-    public void createOrder(@RequestBody Cart cart) {
-        orderService.saveOrder(cart);
+    @Autowired
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
+    @PostMapping("/orders")
+    public Order placeOrder(@RequestBody Order order) {
+        return orderService.placeOrder(order);
     }
 }
-
